@@ -36,10 +36,9 @@ public function behaviors()
 `HttpCache` фильтр применяется только к действиям `index` и `view`. Так же вы можете настроить свойство  [[yii\base\ActionFilter::except|except]] 
 чтобы исключить некоторые действия из обработки фильтра.
 
-Besides controllers, you can also declare filters in a [module](structure-modules.md) or [application](structure-applications.md).
-When you do so, the filters will be applied to *all* controller actions belonging to that module or application,
-unless you configure the filters' [[yii\base\ActionFilter::only|only]] and [[yii\base\ActionFilter::except|except]]
-properties like described above.
+Помимо контроллера, фильтр можно привязать к [модулю](structure-modules.md) или [приложению](structure-applications.md).
+В этом случае фильтры будут применены ко *всем* контроллерам и действиям соответствующего модуля или всего приложения,
+если только вы не настроите дополнительно свойства [[yii\base\ActionFilter::only|only]] и [[yii\base\ActionFilter::except|except]] для того, чтобы изменить такое поведение.
 
 > Note: When declaring filters in modules or applications, you should use [routes](structure-controllers.md#routes)
   instead of action IDs in the [[yii\base\ActionFilter::only|only]] and [[yii\base\ActionFilter::except|except]] properties.
