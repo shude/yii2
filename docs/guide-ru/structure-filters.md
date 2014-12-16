@@ -3,11 +3,10 @@
 
 Фильтры это объекты, которые исполняются до или после [действий контроллера](structure-controllers.md#actions). Например, фильтр 
 контроля доступа может быть исполнен перед действием для того, чтобы проверить разрешен ли доступ к данному действию для 
-конечного пользователя; фильтр сжатия содержимого, напротив может быть исполнен после действия для того, чтобы сжать содержимое
-перед отправкой пользователю.
+конечного пользователя; фильтр сжатия содержимого, напротив может быть исполнен после действия для того, чтобы сжать содержимое перед отправкой пользователю.
 
 Фильтр может состоять из так называемого "пре-фильтра" (фильтр включающийся *перед* действием) и/или "пост-фильтра" (фильтр 
-включающийся *после* действия).
+включающийся *после* действия). Фаза применения пре-фильтров называется фазой "пре-фильтрации" , а фаза применения пост-фильтров соответственно фазой "пост-фильтрации".
 
 ## Использование фильтров <a name="using-filters"></a>
 
@@ -40,34 +39,32 @@ public function behaviors()
 В этом случае фильтры будут применены ко *всем* контроллерам и действиям соответствующего модуля или всего приложения,
 если только вы не настроите дополнительно свойства [[yii\base\ActionFilter::only|only]] и [[yii\base\ActionFilter::except|except]] для того, чтобы изменить такое поведение.
 
-> Note: When declaring filters in modules or applications, you should use [routes](structure-controllers.md#routes)
-  instead of action IDs in the [[yii\base\ActionFilter::only|only]] and [[yii\base\ActionFilter::except|except]] properties.
-  This is because action IDs alone cannot fully specify actions within the scope of a module or application.
+> Информация: при определении фильтров в модулях или приложении, Вам необходимо использовать полный  [маршрут](structure-controllers.md#routes)
+  вместо имени действия в свойствах [[yii\base\ActionFilter::only|only]] и [[yii\base\ActionFilter::except|except]] .
+  Это необходимо, потому что название действия не является самостоятельной единицей и не может существовать вне модуля
+  или приложения.
 
-When multiple filters are configured for a single action, they are applied according to the rules described below:
+Когда несколько фильтров настроены на одно действие, они будут применяться согласно правилам описанным ниже:
 
-* Pre-filtering
-    - Apply filters declared in the application in the order they are listed in `behaviors()`.
-    - Apply filters declared in the module in the order they are listed in `behaviors()`.
-    - Apply filters declared in the controller in the order they are listed in `behaviors()`.
-    - If any of the filters cancel the action execution, the filters (both pre-filters and post-filters) after it will
-      not be applied.
-* Running the action if it passes the pre-filtering.
-* Post-filtering
-    - Apply filters declared in the controller in the reverse order they are listed in `behaviors()`.
-    - Apply filters declared in the module in the reverse order they are listed in `behaviors()`.
-    - Apply filters declared in the application in the reverse order they are listed in `behaviors()`.
+* Пре-фильтрация:
+    - Применяются фильтры, объявленные в приложении, в порядке их следования в `behaviors()`.
+    - Применяются фильтры, объявленные в модуле, в порядке их следования в `behaviors()`.
+    - Применяются фильтры, объявленные в контроллере, в порядке их следования в `behaviors()`.
+    - Если какой-либо фильтр отменяет выполнение действия, то все фильтры (пре-фильтры и пост-фильтры) после него применены        не будут.
+* Запуск действия на исполнение, если все фильтры были успешно пройдены.
+* Пост-фильтрация:
+    - Применяются фильтры, объявленные в контроллере, в обратном порядке их следования в `behaviors()`.
+    - Применяются фильтры, объявленные в модуле, в обратном порядке их следования в `behaviors()`.
+    - Применяются фильтры, объявленные в приложении, в обратном порядке их следования в `behaviors()`.
 
 
-## Creating Filters <a name="creating-filters"></a>
+## Создание фильтров <a name="creating-filters"></a>
 
-To create a new action filter, extend from [[yii\base\ActionFilter]] and override the
-[[yii\base\ActionFilter::beforeAction()|beforeAction()]] and/or [[yii\base\ActionFilter::afterAction()|afterAction()]]
-methods. The former will be executed before an action runs while the latter after an action runs.
-The return value of [[yii\base\ActionFilter::beforeAction()|beforeAction()]] determines whether an action should
-be executed or not. If it is false, the filters after this one will be skipped and the action will not be executed.
+Чтобы создать новый фильтр, необходимо унаследовать класс от [[yii\base\ActionFilter]] и переопределить методы 
+[[yii\base\ActionFilter::beforeAction()|beforeAction()]] и/или [[yii\base\ActionFilter::afterAction()|afterAction()]]. Первый метод будет применен до выполнения действия (в фазе "пре-фильтрации") , а второй соответственно после (в фазе "пост-фильтрации").
+Возвращаемое значение [[yii\base\ActionFilter::beforeAction()|beforeAction()]] определяет будет ли исполнено действие или нет. Если возвращаемое значение false, то все последующие фильтры будут пропущены, а выполнение действия прекращено.
 
-The following example shows a filter that logs the action execution time:
+Следующий пример демонстрирует работу фильтра, ведущего лог времени выполнения действия:
 
 ```php
 namespace app\components;
