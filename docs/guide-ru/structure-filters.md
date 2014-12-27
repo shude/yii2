@@ -92,22 +92,17 @@ class ActionTimeFilter extends ActionFilter
 ```
 
 
-## Core Filters <a name="core-filters"></a>
+## Встроенные фильтры <a name="core-filters"></a>
 
-Yii provides a set of commonly used filters, found primarily under the `yii\filters` namespace. In the following,
-we will briefly introduce these filters.
+Yii предоставляет набор часто используемых фильтров, которые можно найти в пространстве имен `yii\filters`. Далее мы предлагаем краткое введение в использование данных фильтров.
 
 
 ### [[yii\filters\AccessControl|AccessControl]] <a name="access-control"></a>
 
-AccessControl provides simple access control based on a set of [[yii\filters\AccessControl::rules|rules]].
-In particular, before an action is executed, AccessControl will examine the listed rules and find the first one
-that matches the current context variables (such as user IP address, user login status, etc.) The matching
-rule will dictate whether to allow or deny the execution of the requested action. If no rule matches, the access
-will be denied.
+Фильтр AccessControl предоставляет простой способ контроля доступа, основанный на [[yii\filters\AccessControl::rules|правилах (rules)]].
+В частности, перед тем, как действие будет выполнено, AccessControl проверяет список правил и пытается найти соответствие правила с текущим контекством перемнных (например IP адрес пользователя или статус авторизации и т.д.). Найденное соответствие будет определять разрешить или запретить выполнение запрошенного действия. Если ни одного соответствия правилам найдено не было, то дальнейшее выполнение действия будет запрещено.
 
-The following example shows how to allow authenticated users to access the `create` and `update` actions
-while denying all other users from accessing these two actions.
+В следующем примере показано как можно предоставить доступ к действиям `create` и `update` только авторизованным пользователям, в то время как остальным пользователям доступ к этим двум действиям будет запрещен.
 
 ```php
 use yii\filters\AccessControl;
@@ -119,19 +114,19 @@ public function behaviors()
             'class' => AccessControl::className(),
             'only' => ['create', 'update'],
             'rules' => [
-                // allow authenticated users
+                // разрешаем доступ авторизованным пользователям
                 [
                     'allow' => true,
                     'roles' => ['@'],
                 ],
-                // everything else is denied by default
+                // всем остальным запрещено по умолчанию
             ],
         ],
     ];
 }
 ```
 
-For more details about access control in general, please refer to the [Authorization](security-authorization.md) section.
+За дополнительной информацией о способах контроля доступа обращайтесь к разделу [Авторизация](security-authorization.md).
 
 
 ### Authentication Method Filters <a name="auth-method-filters"></a>
